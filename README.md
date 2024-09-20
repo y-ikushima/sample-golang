@@ -66,6 +66,8 @@ sql は random で同じパラメでも異なる値が帰る
 
 環境変数
 
+`.env.temp` を `.env.local` へリネーム
+
 ```
 POSTGRES_MAX_CONNECTIONS
 ```
