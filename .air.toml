@@ -1,0 +1,16 @@
+# .air.toml
+
+# Working directory
+root = "."
+tmp_dir = "tmp"
+
+# Build options
+bin = "tmp/main"   # ビルド後のバイナリファイルの出力先
+cmd = "go build -o tmp/main main.go"
+delay = 1000      # リロードの遅延時間 (ミリ秒)
+log = "air.log"   # ログファイルの出力先
+port = 8080       # アプリケーションが動作するポート
+
+# ファイル変更監視
+[watcher]
+full_reload = false

@@ -1,0 +1,46 @@
+version: "3"
+
+networks:
+  golang-api:
+    driver: bridge
+
+services:
+  postgres:
+    networks:
+      - golang-api
+    container_name: postgres
+    image: postgres:16.1
+    restart: always
+    env_file:
+      - .env.local
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5433:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    networks:
+      - golang-api
+    container_name: app
+    build:
+      context: . # コンテキストを指定
+      dockerfile: ./Dockerfile.dev # Dockerfile.devを指定
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app # ソースコードをコンテナにマウント
+    env_file:
+      - .env.local
+
+volumes:
+  postgres_data:
+  air_config: # air_config ボリュームを定義
