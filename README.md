@@ -9,7 +9,7 @@ brew でもhttps://go.dev/dl/ でも
 go version
 ```
 
-sql を使っているので version は最低でも 1.21 は必須
+sqlc を使っているので version は最低でも 1.21 は必須
 
 > FROM golang:1.23-alpine
 

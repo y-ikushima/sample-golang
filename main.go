@@ -53,6 +53,7 @@ func main() {
 		}
 	
 		// こっから非同期
+		// 単一のゴルーチンなんで不要かも？
 		var wg sync.WaitGroup
 		wg.Add(1)
 	
