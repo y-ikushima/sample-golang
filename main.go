@@ -8,6 +8,7 @@ import (
 	"os"
 	"sample-golang/db/sqlc"
 	"strconv"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
@@ -36,6 +37,7 @@ func main() {
 		})
 	})
 
+
 	// データベースからデータを取得するエンドポイントを定義
 	r.GET("/user", func(c *gin.Context) {
 		idStr := c.Query("id") // クエリパラメータからIDを取得
@@ -49,13 +51,35 @@ func main() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
 			return
 		}
-		user, err := getUsers(queries, int32(id)) // IDを引数として渡す
-		if err != nil {
+	
+		// こっから非同期
+		var wg sync.WaitGroup
+		wg.Add(1)
+	
+		var user *sqlc.GetUserRow
+		var queryErr error
+	
+		// ゴルーチンを使って非同期処理
+		go func() {
+			defer wg.Done()
+			user, queryErr = getUsers(queries, int32(id))
+		}()
+	
+		wg.Wait() // ゴルーチンの完了を待つ
+	
+		if queryErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "ユーザーを取得できません"})
 			return
 		}
+	
+		if user == nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "ユーザーが見つかりません"})
+			return
+		}
+	
 		c.JSON(http.StatusOK, user)
 	})
+	
 
 	port := os.Getenv("SERVER_PORT")
 	if port == "" {
