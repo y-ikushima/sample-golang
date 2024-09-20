@@ -42,9 +42,13 @@ go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 sqlc generate
 ```
 
-db/sqlc 配下に sqlc.yaml で読んだファイルでコードが自動生成される
+db/sqlc 配下に sqlc.yaml で読んだファイルでコードが自動生成される  
+ここらへんを見て  
+https://docs.sqlc.dev/en/latest/tutorials/getting-started-postgresql.html
 
 ## 起動
+
+`.env.temp` を `.env.local` へリネーム
 
 ```
 docker-compose build
@@ -60,13 +64,11 @@ psotman あたりで api をコール
 http://localhost:8080/user?id=1
 ```
 
-sql は random で同じパラメでも異なる値が帰る
+sql は random で同じパラメでも異なる値が帰るようにしている
 
 ### DB 最大接続数
 
 環境変数
-
-`.env.temp` を `.env.local` へリネーム
 
 ```
 POSTGRES_MAX_CONNECTIONS

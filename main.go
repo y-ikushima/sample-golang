@@ -16,12 +16,11 @@ import (
 
 func main() {
 	// データベース接続を設定
-	ctx := context.Background()
-	conn, err := pgx.Connect(ctx, getDBURL())
+	conn, err := pgx.Connect(context.Background(), getDBURL())
 	if err != nil {
 		log.Fatalf("データベースに接続できません: %v", err)
 	}
-	defer conn.Close(ctx)
+	defer conn.Close(context.Background())
 
 	queries := sqlc.New(conn) // 生成されたクエリインターフェースを初期化
 	fmt.Println("データベースに正常に接続しました")
