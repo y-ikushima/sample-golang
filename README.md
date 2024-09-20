@@ -75,3 +75,7 @@ POSTGRES_MAX_CONNECTIONS
 ```
 
 で設定、CloudSQL とかならインフラ側か
+
+### デプロイ
+
+dockerfile は適当
